@@ -1,0 +1,6 @@
+{
+  "name": "Vendor Solution Intelligence Platform",
+  "description": "Supply chain reconciliation platform for automatic BOQ and BOM parsing, AI audits, portal automation, and forensic error diagnosis.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
