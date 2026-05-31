@@ -39,7 +39,7 @@ import { DiscrepancyItem, HealingTask } from './types';
 export default function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
-  const [isDarkMode, setIsDarkMode] = useState(false); // client-facing theme mode flag
+  const [isDarkMode, setIsDarkMode] = useState(true); // default to true dark mode matching Figma/AGENTS.md
 
   // Core stateful representations
   const [discrepancies, setDiscrepancies] = useState<DiscrepancyItem[]>(INITIAL_DISCREPANCIES);
@@ -147,7 +147,7 @@ export default function App() {
   };
 
   return (
-    <div className={`min-h-screen ${isDarkMode ? 'bg-slate-950 text-slate-100' : 'bg-[#F8FAFC] text-slate-900'} font-sans antialiased flex`}>
+    <div className={`min-h-screen ${isDarkMode ? 'bg-[#0F1117] text-slate-100' : 'bg-[#F8FAFC] text-slate-900'} font-sans antialiased flex`}>
       
       {/* 1. Sidebar Nav */}
       <Sidebar 
@@ -165,12 +165,14 @@ export default function App() {
         ${sidebarCollapsed ? 'pl-20' : 'pl-68'} pr-6 pt-6 space-y-6`}>
         
         {/* Sticky top-level bar summary */}
-        <header id="top" className="flex items-center justify-between pb-4 border-b border-slate-200/60 sticky top-0 bg-[#F8FAFC]/70 backdrop-blur-sm z-30">
+        <header id="top" className={`flex items-center justify-between pb-4 sticky top-0 backdrop-blur-sm z-30 transition-colors
+          ${isDarkMode ? 'border-b border-slate-800/80 bg-[#0F1117]/85' : 'border-b border-slate-200/60 bg-[#F8FAFC]/75'}`}>
           <div className="flex items-center gap-3">
-            <span className="p-2 rounded-lg bg-indigo-50 text-indigo-600 font-bold text-xs select-all">PORT: 3000 // STABLE</span>
+            <span className={`p-2 rounded-lg font-bold text-xs select-all transition-colors
+              ${isDarkMode ? 'bg-indigo-950/50 text-indigo-300 border border-indigo-900/40' : 'bg-indigo-50 text-indigo-600'}`}>PORT: 3000 // STABLE</span>
             <div>
-              <h1 className="text-xl font-black text-slate-900 tracking-tight">Solution Workspace</h1>
-              <span className="text-xs text-slate-500 font-medium whitespace-nowrap">Logged in as: <strong className="text-slate-700">vinodhsubramanian@gmail.com</strong></span>
+              <h1 className={`text-xl font-black tracking-tight ${isDarkMode ? 'text-white' : 'text-slate-900'}`}>Solution Workspace</h1>
+              <span className={`text-xs font-medium whitespace-nowrap ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Logged in as: <strong className={isDarkMode ? 'text-slate-205' : 'text-slate-700'}>vinodhsubramanian@gmail.com</strong></span>
             </div>
           </div>
 
@@ -182,14 +184,20 @@ export default function App() {
                 type="text" 
                 placeholder="Search NLP / SKU / Config / UCID..."
                 onClick={() => handleQuickAction('query-studio')}
-                className="w-full bg-white border border-slate-200 rounded-xl pl-3 pr-8 py-1.5 text-xs placeholder-slate-400 focus:outline-none focus:border-indigo-500 cursor-pointer font-medium"
+                className={`w-full border rounded-xl pl-3 pr-8 py-1.5 text-xs focus:outline-none cursor-pointer font-medium transition-colors
+                  ${isDarkMode 
+                    ? 'bg-[#1A1D27] border-slate-805 text-white placeholder-slate-500 focus:border-indigo-500' 
+                    : 'bg-white border-slate-200 text-slate-800 placeholder-slate-400 focus:border-indigo-500'}`}
               />
               <Search className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-2.5" />
             </div>
 
             <button 
               id="top-bell-btn"
-              className="p-2 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 relative text-slate-600 transition cursor-pointer"
+              className={`p-2 rounded-xl border transition cursor-pointer relative
+                ${isDarkMode 
+                  ? 'border-slate-800 bg-[#1A1D27] hover:bg-slate-800 text-slate-200' 
+                  : 'border-slate-200/80 bg-white hover:bg-slate-50 text-slate-600'}`}
             >
               <Bell className="w-4 h-4" />
               <span className="absolute -top-1 -right-1 w-4 h-4 bg-rose-600 text-[9px] font-bold text-white rounded-full flex items-center justify-center font-mono">
@@ -199,42 +207,49 @@ export default function App() {
 
             <button 
               id="top-help-btn"
-              className="p-2 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 text-slate-600 transition cursor-pointer"
+              className={`p-2 rounded-xl border transition cursor-pointer
+                ${isDarkMode 
+                  ? 'border-slate-800 bg-[#1A1D27] hover:bg-slate-800 text-slate-200' 
+                  : 'border-slate-200/80 bg-white hover:bg-slate-50 text-slate-600'}`}
             >
               <HelpCircle className="w-4 h-4" />
             </button>
 
-            <div className="flex items-center gap-2 border-l pl-3.5 border-slate-200">
-              <div className="w-8 h-8 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center text-sm shadow-sm select-none">
+            <div className={`flex items-center gap-2 border-l pl-3.5 ${isDarkMode ? 'border-slate-800' : 'border-slate-200'}`}>
+              <div className="w-8 h-8 rounded-full bg-indigo-150 text-indigo-700 font-bold flex items-center justify-center text-sm shadow-sm select-none">
                 VS
               </div>
               <div className="hidden lg:block text-left text-xs leading-none">
-                <span className="font-extrabold text-slate-800">vinodhsubramanian</span>
-                <span className="text-[10px] text-slate-400 block mt-0.5">Enterprise Admin</span>
+                <span className={`font-extrabold ${isDarkMode ? 'text-slate-100' : 'text-slate-800'}`}>vinodhsubramanian</span>
+                <span className="text-[10px] text-slate-400 block mt-0.5 font-medium">Enterprise Admin</span>
               </div>
             </div>
           </div>
         </header>
 
         {/* Funnel Progress Tracker Breadcrumbs */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm shadow-slate-100/40">
+        <div className={`rounded-2xl border p-4 shadow-sm transition-colors
+          ${isDarkMode 
+            ? 'bg-[#1A1D27] border-slate-800/80 shadow-slate-950/20' 
+            : 'bg-white border-slate-200/80 shadow-slate-100/40'}`}>
           <div className="flex items-center justify-between overflow-x-auto gap-4 py-1 scrollbar-none">
             {funnels.map((node, id) => (
               <button
                 key={id}
                 id={`funnel-node-jump-${node.targetId}`}
                 onClick={() => handleFunnelJump(node.targetId)}
-                className="flex items-center gap-2.5 text-left min-w-max hover:bg-slate-50 p-2 rounded-lg transition-colors cursor-pointer group"
+                className={`flex items-center gap-2.5 text-left min-w-max p-2 rounded-lg transition-colors cursor-pointer group
+                  ${isDarkMode ? 'hover:bg-slate-800/40' : 'hover:bg-slate-50'}`}
               >
-                <div className="w-7 h-7 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-600 font-bold font-mono text-xs flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-colors">
+                <div className="w-7 h-7 rounded-lg bg-indigo-100/10 border border-indigo-900/30 text-indigo-400 font-bold font-mono text-xs flex items-center justify-center group-hover:bg-indigo-600 group-hover:text-white group-hover:border-indigo-600 transition-colors">
                   {id + 1}
                 </div>
                 <div>
-                  <h4 className="text-xs font-bold text-slate-800 leading-none group-hover:text-indigo-600">{node.title}</h4>
+                  <h4 className={`text-xs font-bold leading-none group-hover:text-indigo-400 transition-colors ${isDarkMode ? 'text-slate-200' : 'text-slate-800'}`}>{node.title}</h4>
                   <span className="text-[10px] text-slate-400 font-medium block mt-1">{node.desc}</span>
                 </div>
                 {id < funnels.length - 1 && (
-                  <span className="text-slate-300 font-semibold font-mono text-xs select-none pl-3">&gt;</span>
+                  <span className="text-slate-350 font-semibold font-mono text-xs select-none pl-3">&gt;</span>
                 )}
               </button>
             ))}
@@ -247,6 +262,7 @@ export default function App() {
         <SolutionWorkspace 
           ucidConfigs={ucidConfigs}
           metrics={currentMetrics}
+          isDarkMode={isDarkMode}
           onUploadFile={(type, name, rows) => {
             // update items to trigger calculations
             setDiscrepancies(prev => [
@@ -269,6 +285,7 @@ export default function App() {
         <MissionControl 
           portalConnections={PORTAL_CONNECTIONS}
           initialMissionSteps={MISSION_STEPS}
+          isDarkMode={isDarkMode}
         />
 
         {/* (4) Compare Overview (Hierarchies, Parts discrepancies lists, Category Donut charts) */}
@@ -278,6 +295,7 @@ export default function App() {
           selectedSku={selectedSku}
           setSelectedSku={setSelectedSku}
           onAutoHealSku={handlePatchSku}
+          isDarkMode={isDarkMode}
         />
 
         {/* (5) Investigate Forensic details card */}
@@ -287,6 +305,7 @@ export default function App() {
           forensicChecklist={FORENSIC_CHECKLISTS}
           onPatchSku={handlePatchSku}
           onIgnoreSku={handleIgnoreSku}
+          isDarkMode={isDarkMode}
         />
 
         {/* (6 to 10) Underneath Bento grid (Query NLP, Catalog, Fix center, Gov logs, Exporters) */}
@@ -295,17 +314,19 @@ export default function App() {
           onResolveHeal={handleResolveHeal}
           queryLogs={SYSTEM_QUERY_LOGS}
           suggestedQueries={SUGGESTED_QUERIES}
+          isDarkMode={isDarkMode}
         />
 
         {/* App Footer */}
-        <footer className="pt-8 border-t border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between text-xs text-slate-400 font-medium">
+        <footer className={`pt-8 border-t flex flex-col md:flex-row md:items-center justify-between text-xs font-medium transition-colors
+          ${isDarkMode ? 'border-slate-800 text-slate-500' : 'border-slate-200/80 text-slate-400'}`}>
           <span>&copy; 2026 Vendor Solution Intelligence Platform. All rights reserved. • Protected under EU-889 specifications.</span>
           <div className="flex gap-4 mt-2 md:mt-0 font-semibold">
-            <span className="flex items-center gap-1.5 text-emerald-600">
+            <span className="flex items-center gap-1.5 text-emerald-500">
               <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" /> Real-time status sync active
             </span>
-            <span className="hover:underline cursor-pointer">Security Compliance</span>
-            <span className="hover:underline cursor-pointer">Privacy Charter</span>
+            <span className={`hover:underline cursor-pointer ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Security Compliance</span>
+            <span className={`hover:underline cursor-pointer ${isDarkMode ? 'text-slate-400' : 'text-slate-500'}`}>Privacy Charter</span>
           </div>
         </footer>
 
